@@ -14,14 +14,14 @@
 | ---------- |:----------------------------:|:---------------------------------------------------:| -------------------------------------------:|
 | ext4       | long time                    | cp: failed to clone: Inappropriate ioctl for device | long time                                   |
 | btrfs      | long time                    | very fast                                           | very fast                                   |
-| ntfs       |   | are neat      |    $1 |
+| ntfs       |   |   |   |
 
 # Test Two - get xattr infors
 + `getfattr test.tar` after run `setfattr -n user.foo -v bar test.tar` & `cp` just like below
 
 | filesystem | cp ./test.tar ./test.tar.tar | cp --reflink=always ./test.tar ./test.tar.tar | cp --reflink=auto ./test.tar ./test.tar.tar |
 | ---------- |:----------------------------:|:---------------------------------------------:| -------------------------------------------:|
-| ext4       | long time | cp: failed to clone: Inappropriate ioctl for device | long time |
+| ext4       |   |   |   |
 | btrfs      | none                    | none                                     | none                                   |
 | ntfs       |   | are neat      |    $1 |
 
@@ -29,7 +29,7 @@
 + get some infors after run `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
 
 | filesystem | getfattr test.tar | getfattr test.tar.tar |
-| ---------- |:----------------------------:|-------------------------------------------:|
-| ext4       | long time | cp: failed to clone: Inappropriate ioctl for device |
-| btrfs      | none                    | none                                     | 
-| ntfs       |   | are neat      |
+| ---------- |:-----------------:|----------------------:|
+| ext4       |   |   |
+| btrfs      |   |   | 
+| ntfs       |   |   |
