@@ -25,8 +25,17 @@
 | btrfs      | none                    | none                                     | none                                   |
 | ntfs       |   | are neat      |    $1 |
 
-# Test Three - modify xattr infors
-+ get some infors after run `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
+# Test Three a - modify xattr infors
++ get some infors after run `cp --reflink=always ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
+
+| filesystem | getfattr test.tar | getfattr test.tar.tar |
+| ---------- |:-----------------:|----------------------:|
+| ext4       |   |   |
+| btrfs      |   |   | 
+| ntfs       |   |   |
+
+# Test Three b - modify xattr infors
++ get some infors after run `cp --reflink=auto ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
 
 | filesystem | getfattr test.tar | getfattr test.tar.tar |
 | ---------- |:-----------------:|----------------------:|
