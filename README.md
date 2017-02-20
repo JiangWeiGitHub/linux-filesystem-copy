@@ -10,20 +10,20 @@
 # Test One - get running time
 + run `cp` command line just like below
 
-| filesystem | cp ./test.tar ./test.tar.tar | cp --reflink=always ./test.tar ./test.tar.tar       | cp --reflink=auto ./test.tar ./test.tar.tar |
-| ---------- |:----------------------------:|:---------------------------------------------------:| -------------------------------------------:|
-| ext4       | long time                    | cp: failed to clone: Inappropriate ioctl for device | long time                                   |
-| btrfs      | long time                    | very fast                                           | very fast                                   |
-| ntfs       |   |   |   |
+| filesystem | cp ./test.tar ./test.tar.tar | cp --reflink=always ./test.tar ./test.tar.tar | cp --reflink=auto ./test.tar ./test.tar.tar |
+| ---------- |:----------------------------:|:---------------------------------------------:| --------------------------------------------------------:|
+| ext4       | long time                    | Inappropriate ioctl for device                | long time                                                |
+| btrfs      | long time                    | very fast                                     | very fast                                                |
+| ntfs       | long time                    | Bad address                                   | long time                                                |
 
 # Test Two - get xattr infors
 + `getfattr -n user.foo test.tar.tar` after run `setfattr -n user.foo -v bar test.tar` & `cp` just like below
 
 | filesystem | cp ./test.tar ./test.tar.tar | cp --reflink=always ./test.tar ./test.tar.tar | cp --reflink=auto ./test.tar ./test.tar.tar |
-| ---------- |:----------------------------:|:---------------------------------------------:| -------------------------------------------:|
-| ext4       |   |   |   |
-| btrfs      | none                    | none                                     | none                                   |
-| ntfs       |   | are neat      |    $1 |
+| ---------- |:----------------------------:|:---------------------------------------------:| --------------------------------------------------------:|
+| ext4       | No such attribute            | null                                          | No such attribute                                        |
+| btrfs      | No such attribute            | No such attribute                             | No such attribute                                        |
+| ntfs       | No such attribute            | null                                          | No such attribute                                        |
 
 # Test Three - modify xattr infors under btrfs
 + `getfattr -n user.foo test.tar & getfattr -n user.foo test.tar.tar` after run `cp --reflink=always ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
@@ -32,9 +32,23 @@
 | ----- |:-----------------------------:|----------------------------------:|
 | btrfs | user.foo="bar"                | user.foo="rab"                    | 
 
-# Test Foure - modify xattr infors under btrfs
+# Test Four - modify xattr infors under btrfs
 + `getfattr -n user.foo test.tar & getfattr -n user.foo test.tar.tar` after run `cp --reflink=auto ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
 
 | name  | getfattr -n user.foo test.tar | getfattr -n user.foo test.tar.tar |
 | ----- |:-----------------------------:|----------------------------------:|
 | btrfs | user.foo="bar"                | user.foo="rab"                    | 
+
+# Test Five - modify xattr infors under ext4
++ `getfattr -n user.foo test.tar & getfattr -n user.foo test.tar.tar` after run `cp --reflink=auto ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
+
+| name  | getfattr -n user.foo test.tar | getfattr -n user.foo test.tar.tar |
+| ----- |:-----------------------------:|----------------------------------:|
+| ext4  | user.foo="bar"                | user.foo="rab"                    | 
+
+# Test Six - modify xattr infors under ntfs
++ `getfattr -n user.foo test.tar & getfattr -n user.foo test.tar.tar` after run `cp --reflink=auto ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
+
+| name  | getfattr -n user.foo test.tar | getfattr -n user.foo test.tar.tar |
+| ----- |:-----------------------------:|----------------------------------:|
+| ntfs  | user.foo="bar"                | user.foo="rab"                    | 
