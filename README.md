@@ -17,7 +17,7 @@
 | ntfs       |   |   |   |
 
 # Test Two - get xattr infors
-+ `getfattr test.tar` after run `setfattr -n user.foo -v bar test.tar` & `cp` just like below
++ `getfattr -n user.foo test.tar.tar` after run `setfattr -n user.foo -v bar test.tar` & `cp` just like below
 
 | filesystem | cp ./test.tar ./test.tar.tar | cp --reflink=always ./test.tar ./test.tar.tar | cp --reflink=auto ./test.tar ./test.tar.tar |
 | ---------- |:----------------------------:|:---------------------------------------------:| -------------------------------------------:|
@@ -25,20 +25,16 @@
 | btrfs      | none                    | none                                     | none                                   |
 | ntfs       |   | are neat      |    $1 |
 
-# Test Three a - modify xattr infors
-+ get some infors after run `cp --reflink=always ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
+# Test Three - modify xattr infors under btrfs
++ `getfattr -n user.foo test.tar & getfattr -n user.foo test.tar.tar` after run `cp --reflink=always ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
 
-| filesystem | getfattr test.tar | getfattr test.tar.tar |
-| ---------- |:-----------------:|----------------------:|
-| ext4       |   |   |
-| btrfs      |   |   | 
-| ntfs       |   |   |
+| name  | getfattr -n user.foo test.tar | getfattr -n user.foo test.tar.tar |
+| ----- |:-----------------------------:|----------------------------------:|
+| btrfs | user.foo="bar"                | user.foo="rab"                    | 
 
-# Test Three b - modify xattr infors
-+ get some infors after run `cp --reflink=auto ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
+# Test Foure - modify xattr infors under btrfs
++ `getfattr -n user.foo test.tar & getfattr -n user.foo test.tar.tar` after run `cp --reflink=auto ./test.tar ./test.tar.tar` & `setfattr -n user.foo -v bar test.tar` & `setfattr -n user.foo -v rab test.tar.tar`
 
-| filesystem | getfattr test.tar | getfattr test.tar.tar |
-| ---------- |:-----------------:|----------------------:|
-| ext4       |   |   |
-| btrfs      |   |   | 
-| ntfs       |   |   |
+| name  | getfattr -n user.foo test.tar | getfattr -n user.foo test.tar.tar |
+| ----- |:-----------------------------:|----------------------------------:|
+| btrfs | user.foo="bar"                | user.foo="rab"                    | 
