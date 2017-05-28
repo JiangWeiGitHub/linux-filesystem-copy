@@ -7,6 +7,11 @@
 + mount this disk to `/haha`
 + copy file `test.tar` (23G) into `/haha`
 
+# Ps
++ Preserve `xattr` attributes
+
+  `cp --preserve=xattr FROM_A TO_B`
+
 # Test One - get running time
 + run `cp` command line just like below
 
